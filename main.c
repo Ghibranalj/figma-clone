@@ -96,6 +96,7 @@ int main(void) {
     if (shouldTakeScreenshot) {
       shouldTakeScreenshot = false;
       TakeScreenshot(strcat(screenshotLocation, ".png"));
+      free(screenshotLocation);
     }
   }
   CloseWindow();
