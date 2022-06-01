@@ -7,7 +7,7 @@
 
   <title>My Game</title>
   <script>
-    window.alert = function (msg){
+    window.alert = function (msg) {
       console.error(msg);
     }
   </script>
@@ -19,15 +19,14 @@
     <canvas class="emscripten" id="canvas" oncontextmenu="event.preventDefault()" tabindex=-1></canvas>
   </div>
 
-  <button onClick="buttonColorChange('red')"> Change to Red</button>
-  <button onClick="buttonColorChange('blue')"> Change to Blue</button>
-  <button onClick="buttonColorChange('green')"> Change to Green</button>
-  <button onClick="buttonColorChange('white')"> Change to white</button>
-  <button onClick="buttonColorChange('black')"> Change to black</button>
+  <div class="">
+    <input type="color" name="color" value="0x00" onChange="buttonColorChange(event)">
+    <label for="color"> Pick Your Color</label>
+  </div>
 
   <br>
   <button onclick="takeScreenShot()">Take Screenshot</button>
-
+  <input type="text" id="screenshot-name">
   <br>
   <button onclick="tEraser()">Toggle Eraser</button>
 
@@ -38,8 +37,8 @@
     var Module = {
       preRun: [],
       postRun: [],
-      print: function (text) { console.log(text);},
-      printErr: function (text) { console.error(text);},
+      print: function (text) { console.log(text); },
+      printErr: function (text) { console.error(text); },
       canvas: (function () {
         var canvas = document.querySelector('#canvas');
 

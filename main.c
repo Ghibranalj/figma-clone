@@ -46,7 +46,7 @@ int main(void) {
 
       Vector2 mousePos = GetMousePosition();
       int index = -1;
-      for (int i = count-1; i > -1; i--) {
+      for (int i = count - 1; i > -1; i--) {
         Rectangle rec = rect[i].rec;
         if (CheckCollisionPointRec(mousePos, rec)) {
           index = i;
@@ -55,6 +55,7 @@ int main(void) {
       }
 
       if (index == -1) {
+        EndDrawing();
         continue;
       }
 
@@ -65,14 +66,16 @@ int main(void) {
       }
       count--;
 
+
+      EndDrawing();
       continue;
     }
 
-    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+    if (!isEraseMode && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
       from = GetMousePosition();
     }
 
-    if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
+    if (!isEraseMode && IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
 
       Vector2 to = GetMousePosition();
       Rectangle rec = (Rectangle){from.x, from.y, to.x - from.x, to.y - from.y};
@@ -80,7 +83,7 @@ int main(void) {
       DrawRectangle(rec.x, rec.y, rec.width, rec.height, col);
     }
 
-    if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
+    if (!isEraseMode && IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
       Vector2 to = GetMousePosition();
       rect[count].rec =
           (Rectangle){from.x, from.y, to.x - from.x, to.y - from.y};
@@ -92,7 +95,7 @@ int main(void) {
 
     if (shouldTakeScreenshot) {
       shouldTakeScreenshot = false;
-      TakeScreenshot("test.png");
+      TakeScreenshot(strcat(screenshotLocation, ".png"));
     }
   }
   CloseWindow();
@@ -101,41 +104,25 @@ int main(void) {
 }
 
 void makeScreenshot(char *filename) {
-  shouldTakeScreenshot = true;
-  screenshotLocation = filename;
+  if(shouldTakeScreenshot){
+    return;
+  }
+
+  int size = strlen(filename);
+  screenshotLocation = malloc(sizeof(char *) * size);
   strcpy(screenshotLocation, filename);
+
+  shouldTakeScreenshot = true;
 }
 
-void setColor(char *color) {
+void setColor(unsigned int hex) {
+  printf("%x\n", hex);
 
-  if (strcasecmp(color, "black") == 0) {
-    col = BLACK;
-    return;
-  }
+  unsigned int r = (hex & 0xFF0000) >> 16;
+  unsigned int g = (hex & 0xFF00) >> 8;
+  unsigned int b = (hex & 0xFF);
 
-  if (strcasecmp(color, "white") == 0) {
-    col = WHITE;
-    return;
-  }
-
-  if (strcasecmp(color, "red") == 0) {
-    col = RED;
-    return;
-  }
-
-  if (strcasecmp(color, "green") == 0) {
-    col = GREEN;
-    return;
-  }
-
-  if (strcasecmp(color, "blue") == 0) {
-    col = BLUE;
-    return;
-  }
-
-  col = YELLOW;
-
-  free(color);
+  col = (Color){r, g, b, 255};
 }
 
 void toggleEraser() { isEraseMode = !isEraseMode; }

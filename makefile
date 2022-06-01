@@ -13,7 +13,7 @@ all: docs
 	   -s EXPORTED_FUNCTIONS=_makeScreenshot,_setColor,_main,_toggleEraser -s 'EXPORTED_RUNTIME_METHODS=ccall,cwrap'
 docs:
 	mkdir docs
-	cp script.js docs
+	ln -s `pwd`/script.js `pwd`/docs/script.js
 
 .PHONY: clean
 
