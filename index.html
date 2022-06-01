@@ -11,6 +11,7 @@
       console.error(msg);
     }
   </script>
+  <script src="./script.js" defer></script>
 </head>
 
 <body>
@@ -18,6 +19,16 @@
     <canvas class="emscripten" id="canvas" oncontextmenu="event.preventDefault()" tabindex=-1></canvas>
   </div>
 
+
+  <button onClick="buttonColorChange('red')"> Change to Red</button>
+  <button onClick="buttonColorChange('blue')"> Change to Blue</button>
+  <button onClick="buttonColorChange('green')"> Change to Green</button>
+  <button onClick="buttonColorChange('white')"> Change to white</button>
+  <button onClick="buttonColorChange('black')"> Change to black</button>
+
+
+  <br>
+  <button onclick="takeScreenShot()">Take Screenshot</button>
 
   <script type='text/javascript'>
     var statusElement = document.querySelector('#status');
@@ -47,6 +58,7 @@
   </script>
 
   {{{ SCRIPT }}}
+
 </body>
 
 </html>
