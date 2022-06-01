@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en-us">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <title>My Game</title>
+  <script>
+    window.alert = function (msg){
+      console.error(msg);
+    }
+  </script>
+  <script src="./script.js" defer></script>
+</head>
+
+<body>
+  <div class="emscripten_border">
+    <canvas class="emscripten" id="canvas" oncontextmenu="event.preventDefault()" tabindex=-1></canvas>
+  </div>
+
+  <button onClick="buttonColorChange('red')"> Change to Red</button>
+  <button onClick="buttonColorChange('blue')"> Change to Blue</button>
+  <button onClick="buttonColorChange('green')"> Change to Green</button>
+  <button onClick="buttonColorChange('white')"> Change to white</button>
+  <button onClick="buttonColorChange('black')"> Change to black</button>
+
+  <br>
+  <button onclick="takeScreenShot()">Take Screenshot</button>
+
+  <br>
+  <button onclick="tEraser()">Toggle Eraser</button>
+
+  <script type='text/javascript'>
+    var statusElement = document.querySelector('#status');
+    var progressElement = document.querySelector('#progress');
+    var spinnerElement = document.querySelector('#spinner');
+    var Module = {
+      preRun: [],
+      postRun: [],
+      print: function (text) { console.log(text);},
+      printErr: function (text) { console.error(text);},
+      canvas: (function () {
+        var canvas = document.querySelector('#canvas');
+
+        canvas.addEventListener("webglcontextlost", function (e) { alert('WebGL context lost. You will need to reload the page.'); e.preventDefault(); }, false);
+
+        return canvas;
+      })(),
+      setStatus: function () { },
+      totalDependencies: 0,
+      monitorRunDependencies: function () { }
+    };
+
+    window.onerror = function () {
+      console.error("ERROR");
+    };
+  </script>
+
+  <script async type="text/javascript" src="index.js"></script>
+
+</body>
+
+</html>
+
