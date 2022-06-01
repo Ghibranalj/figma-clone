@@ -2,11 +2,13 @@
 
 let setColor;
 let takeScreenshot;
+let toggleEraser;
 
 Module.onRuntimeInitialized = function() {
     console.log("Module loaded");
     setColor = Module.cwrap('setColor', null, ['string']);
     takeScreenshot = Module.cwrap('makeScreenshot', null, ['string']);
+    toggleEraser = Module.cwrap('toggleEraser', null, []);
 }
 
 
@@ -39,4 +41,8 @@ function download(url){
     link.href = url;
     link.download = "screenshot.png";
     link.click();
+}
+
+function tEraser(){
+    toggleEraser();
 }

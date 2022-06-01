@@ -10,7 +10,7 @@ EXPORTED_FUNC = test
 all: docs
 	$(CC) main.c -o docs/index.html -I$(INC) -sUSE_GLFW=3 -sASYNCIFY\
 	  --shell-file $(SHELL_HTML) $(LIB_PARAMS) $(LIB) -L$(LIB)\
-	   -s EXPORTED_FUNCTIONS=_makeScreenshot,_setColor,_main -s 'EXPORTED_RUNTIME_METHODS=ccall,cwrap'
+	   -s EXPORTED_FUNCTIONS=_makeScreenshot,_setColor,_main,_toggleEraser -s 'EXPORTED_RUNTIME_METHODS=ccall,cwrap'
 docs:
 	mkdir docs
 	cp script.js docs

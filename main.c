@@ -11,6 +11,7 @@
 Color col;
 bool shouldTakeScreenshot = false;
 char *screenshotLocation;
+bool isEraseMode = false;
 
 typedef struct {
   Rectangle rec;
@@ -40,6 +41,33 @@ int main(void) {
       Color col = rect[i].col;
       DrawRectangle(rec.x, rec.y, rec.width, rec.height, col);
     }
+
+    if (isEraseMode && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+
+      Vector2 mousePos = GetMousePosition();
+      int index = -1;
+      for (int i = count-1; i > -1; i--) {
+        Rectangle rec = rect[i].rec;
+        if (CheckCollisionPointRec(mousePos, rec)) {
+          index = i;
+          break;
+        }
+      }
+
+      if (index == -1) {
+        continue;
+      }
+
+      printf("%d\n", count);
+
+      for (int i = index; i < count - 1; i++) {
+        rect[i] = rect[i + 1];
+      }
+      count--;
+
+      continue;
+    }
+
     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
       from = GetMousePosition();
     }
@@ -67,7 +95,7 @@ int main(void) {
       TakeScreenshot("test.png");
     }
   }
-  CloseWindow(); // Close window and OpenGL context
+  CloseWindow();
 
   return 0;
 }
@@ -109,3 +137,5 @@ void setColor(char *color) {
 
   free(color);
 }
+
+void toggleEraser() { isEraseMode = !isEraseMode; }
