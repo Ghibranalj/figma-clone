@@ -4,13 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-
   <title>My Game</title>
-  <script>
-    window.alert = function (msg) {
-      console.error(msg);
-    }
-  </script>
   <script src="./script.js" defer></script>
 </head>
 
@@ -24,11 +18,14 @@
     <label for="color"> Pick Your Color</label>
   </div>
 
-  <br>
+<div class="">
   <button onclick="takeScreenShot()">Take Screenshot</button>
   <input type="text" id="screenshot-name">
-  <br>
-  <button onclick="tEraser()">Toggle Eraser</button>
+</div>
+
+<div class="">
+  <button onclick="toggleEraser()">Toggle Eraser</button>
+</div>
 
   <script type='text/javascript'>
     var statusElement = document.querySelector('#status');
@@ -55,7 +52,6 @@
       console.error("ERROR");
     };
   </script>
-
   <script async type="text/javascript" src="index.js"></script>
 
 </body>

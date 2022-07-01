@@ -18,81 +18,89 @@ typedef struct {
   Color col;
 } myRectangle;
 
+// main thread
 int main(void) {
 
   myRectangle rect[MAX_REC];
   int count = 0;
-  col = BLACK;
 
+  col = BLACK;
   const int screenWidth = 800;
   const int screenHeight = 450;
-  SetTraceLogLevel(LOG_NONE);
   InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
-
   SetTargetFPS(60);
+
   Vector2 from;
+
   while (!WindowShouldClose()) {
-
     BeginDrawing();
+    {
+      ClearBackground(RAYWHITE);
 
-    ClearBackground(RAYWHITE);
-    for (int i = 0; i < count; i++) {
-      Rectangle rec = rect[i].rec;
-      Color col = rect[i].col;
-      DrawRectangle(rec.x, rec.y, rec.width, rec.height, col);
-    }
-
-    if (isEraseMode && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-
-      Vector2 mousePos = GetMousePosition();
-      int index = -1;
-      for (int i = count - 1; i > -1; i--) {
+      // Draw every rectangle.
+      for (int i = 0; i < count; i++) {
         Rectangle rec = rect[i].rec;
-        if (CheckCollisionPointRec(mousePos, rec)) {
-          index = i;
-          break;
-        }
+        Color col = rect[i].col;
+        DrawRectangle(rec.x, rec.y, rec.width, rec.height, col);
       }
 
-      if (index == -1) {
+      // Enter erase mode
+      if (isEraseMode && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+
+        Vector2 mousePos = GetMousePosition();
+        int index = -1;
+        for (int i = count - 1; i > -1; i--) {
+          Rectangle rec = rect[i].rec;
+          if (CheckCollisionPointRec(mousePos, rec)) {
+            index = i;
+            break;
+          }
+        }
+
+        if (index == -1) {
+          EndDrawing();
+          continue;
+        }
+
+        printf("%d\n", count);
+
+        for (int i = index; i < count - 1; i++) {
+          rect[i] = rect[i + 1];
+        }
+        count--;
+
         EndDrawing();
         continue;
       }
 
-      printf("%d\n", count);
+      // Draw Mode
+      else if (!isEraseMode) {
 
-      for (int i = index; i < count - 1; i++) {
-        rect[i] = rect[i + 1];
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+          from = GetMousePosition();
+        }
+
+        if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
+
+          Vector2 to = GetMousePosition();
+          Rectangle rec =
+              (Rectangle){from.x, from.y, to.x - from.x, to.y - from.y};
+
+          DrawRectangle(rec.x, rec.y, rec.width, rec.height, col);
+        }
+
+        if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
+          Vector2 to = GetMousePosition();
+          rect[count].rec =
+              (Rectangle){from.x, from.y, to.x - from.x, to.y - from.y};
+          rect[count].col = col;
+          count++;
+        }
       }
-      count--;
-
-
-      EndDrawing();
-      continue;
     }
-
-    if (!isEraseMode && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-      from = GetMousePosition();
-    }
-
-    if (!isEraseMode && IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
-
-      Vector2 to = GetMousePosition();
-      Rectangle rec = (Rectangle){from.x, from.y, to.x - from.x, to.y - from.y};
-
-      DrawRectangle(rec.x, rec.y, rec.width, rec.height, col);
-    }
-
-    if (!isEraseMode && IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
-      Vector2 to = GetMousePosition();
-      rect[count].rec =
-          (Rectangle){from.x, from.y, to.x - from.x, to.y - from.y};
-      rect[count].col = col;
-      count++;
-    }
-
     EndDrawing();
 
+    // Take screenshot
     if (shouldTakeScreenshot) {
       shouldTakeScreenshot = false;
       TakeScreenshot(strcat(screenshotLocation, ".png"));
@@ -105,7 +113,7 @@ int main(void) {
 }
 
 void makeScreenshot(char *filename) {
-  if(shouldTakeScreenshot){
+  if (shouldTakeScreenshot) {
     return;
   }
 
@@ -123,7 +131,7 @@ void setColor(unsigned int hex) {
   unsigned int g = (hex & 0xFF00) >> 8;
   unsigned int b = (hex & 0xFF);
 
+  printf("red: %d  green:%d blue: %d\n", r, g, b);
   col = (Color){r, g, b, 255};
 }
-
 void toggleEraser() { isEraseMode = !isEraseMode; }

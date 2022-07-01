@@ -22,12 +22,8 @@ function takeScreenShot(){
     takeScreenshot(name);
 }
 
-function tEraser(){
-    toggleEraser();
-}
 
-
-// this is called by c library
+// this is called by c librar
 
 function saveFileFromMEMFSToDisk(memoryFSname, localFSname)     // This can be called by C/C++ code
 {

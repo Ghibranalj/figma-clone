@@ -6,22 +6,24 @@ let toggleEraser;
 
 Module.onRuntimeInitialized = function() {
     console.log("Module loaded");
-    setColor = Module.cwrap('setColor', null, ['string']);
+    setColor = Module.cwrap('setColor', null, ['number']);
     takeScreenshot = Module.cwrap('makeScreenshot', null, ['string']);
     toggleEraser = Module.cwrap('toggleEraser', null, []);
 }
 
 
-
-function buttonColorChange(col){
-    setColor(col);
+function buttonColorChange(e){
+    let color = Number(e.target.value.replace("#", "0x"));
+    setColor(color);
 }
 
 function takeScreenShot(){
-    const time = new Date().getTime();
-    takeScreenshot("screenshot-"+ time);
+    let name = document.querySelector('#screenshot-name').value
+    takeScreenshot(name);
 }
 
+
+// this is called by c librar
 
 function saveFileFromMEMFSToDisk(memoryFSname, localFSname)     // This can be called by C/C++ code
 {
@@ -33,16 +35,12 @@ function saveFileFromMEMFSToDisk(memoryFSname, localFSname)     // This can be c
     else blob = new Blob([data.buffer], { type: "image/png" });
 
     let link = window.URL.createObjectURL(blob);
-    download(link);
+    download(link, localFSname);
 }
 
-function download(url){
+function download(url, name) {
     const link = document.createElement('a');
     link.href = url;
-    link.download = "screenshot.png";
+    link.download = name;
     link.click();
-}
-
-function tEraser(){
-    toggleEraser();
 }
